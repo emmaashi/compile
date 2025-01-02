@@ -30,6 +30,30 @@ export default function Home() {
             />
           </div>
           <div>
+            <label htmlFor="email" className="block text-lg font-medium mb-2 text-black">
+              First Name
+            </label>
+            <Input
+              type="name"
+              id="firstName"
+              placeholder="Enter your first name"
+              className="w-full border-b-2 border-gray-300 focus:border-black focus:outline-none py-3"
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="email" className="block text-lg font-medium mb-2 text-black">
+              Last Name
+            </label>
+            <Input
+              type="name"
+              id="lastName"
+              placeholder="Enter your last name"
+              className="w-full border-b-2 border-gray-300 focus:border-black focus:outline-none py-3"
+              required
+            />
+          </div>
+          <div>
             <label htmlFor="password" className="block text-lg font-medium mb-2 text-black">
               Password
             </label>
@@ -41,18 +65,22 @@ export default function Home() {
               required
             />
           </div>
-          <Link href="/home">
-            <Button className="w-full bg-black text-white py-3">
-              Login
-            </Button>
-          </Link>
+          <div>
+            <label htmlFor="password" className="block text-lg font-medium mb-2 text-black">
+              Confirm Password
+            </label>
+            <Input
+              type="password"
+              id="password"
+              placeholder="Enter your password"
+              className="w-full border-b-2 border-gray-300 focus:border-black focus:outline-none py-3"
+              required
+            />
+          </div>
+          <Button type="submit" className="w-full bg-black text-white py-3">
+            Sign-Up
+          </Button>
         </form>
-        <p className="text-center text-lg text-black">
-          Don’t have an account?{" "}
-          <Link href="/sign-up" className="text-blue-600 hover:underline">
-            Sign up here
-          </Link>
-        </p>
       </main>
     </div>
   );
