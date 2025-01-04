@@ -42,7 +42,7 @@ const patients: Patient[] = [
     firstName: "Emma",
     lastName: "Shi",
     cancerType: "Breast Cancer",
-    birthday: "2006-04-05",
+    birthday: "2006-04-04",
     notes: "Scheduled for surgery next week.",
     photo: "/emma.png",
   },
@@ -108,7 +108,7 @@ function ProfilePage() {
               <span className="font-medium">{`${patient.firstName} ${patient.lastName}`}</span>
               <br />
               <span className="text-sm text-gray-500">
-                {`${new Date(patient.birthday).toLocaleDateString()}`}
+                {`${patient.birthday}`}
               </span>
             </CardContent>
           </Card>
@@ -142,6 +142,17 @@ function ProfilePage() {
                   }
                 />
               </div>
+              <div>
+                <Label htmlFor="birthday"><b>Birthday</b></Label>
+                <Input
+                id="birthday"
+                type="date"
+                value={selectedPatient.birthday}
+                onChange={(e) =>
+                setSelectedPatient({ ...selectedPatient, birthday: e.target.value })
+                }
+                />
+                </div>
               <div>
               <Label htmlFor="cancerType"><b>Cancer Type</b></Label>
               <Select
