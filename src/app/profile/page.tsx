@@ -5,17 +5,24 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import MaskedText from "./components/masked-text";
-import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card"; // ShadCN UI Card components
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select"
 import Image from "next/image";
 
 interface Patient {
   id: number;
   firstName: string;
   lastName: string;
-  email: string;
-  password: string;
-  age: number;
+  cancerType: string;
+  birthday: string; // Use a date string format (YYYY-MM-DD)
+  notes: string;
   photo: string;
 }
 
@@ -25,21 +32,23 @@ const patients: Patient[] = [
     id: 1,
     firstName: "John",
     lastName: "Doe",
-    email: "john.doe@example.com",
-    password: "password123",
-    age: 35,
+    cancerType: "Lung Cancer",
+    birthday: "1987-05-15",
+    notes: "Undergoing treatment with chemotherapy.",
     photo: "/images/john.jpg",
   },
   {
     id: 2,
-    firstName: "Jane",
-    lastName: "Smith",
-    email: "jane.smith@example.com",
-    password: "securePass456",
-    age: 28,
+    firstName: "Emma",
+    lastName: "Shi",
+    cancerType: "Breast Cancer",
+    birthday: "2006-04-05",
+    notes: "Scheduled for surgery next week.",
     photo: "/emma.png",
   },
 ];
+
+const cancerTypes = ["Lung Cancer", "Breast Cancer", "Colon Cancer", "Stomach Cancer", "Prostate Cancer"];
 
 function ProfilePage() {
   const [isDialogOpen, setDialogOpen] = useState(false);
@@ -97,8 +106,10 @@ function ProfilePage() {
             </CardHeader>
             <CardContent className="text-center">
               <span className="font-medium">{`${patient.firstName} ${patient.lastName}`}</span>
-              <br></br>
-              <span className="text-sm text-gray-500">{`Age: ${patient.age}`}</span>
+              <br />
+              <span className="text-sm text-gray-500">
+                {`${new Date(patient.birthday).toLocaleDateString()}`}
+              </span>
             </CardContent>
           </Card>
         ))}
@@ -108,7 +119,7 @@ function ProfilePage() {
         <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
           <DialogContent className="max-w-md space-y-6">
             <DialogHeader>
-              <DialogTitle>Edit Patient Details</DialogTitle>
+              <DialogTitle>Edit patient details</DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
               <div>
@@ -132,23 +143,34 @@ function ProfilePage() {
                 />
               </div>
               <div>
-                <Label htmlFor="email"><b>Email</b></Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={selectedPatient.email}
-                  onChange={(e) =>
-                    setSelectedPatient({ ...selectedPatient, email: e.target.value })
-                  }
-                />
-              </div>
+              <Label htmlFor="cancerType"><b>Cancer Type</b></Label>
+              <Select
+                value={selectedPatient.cancerType}
+                onValueChange={(value) =>
+                  setSelectedPatient({ ...selectedPatient, cancerType: value })
+                }
+              >
+                <SelectTrigger id="cancerType">
+                  <SelectValue placeholder="Select cancer type" />
+                </SelectTrigger>
+                <SelectContent position="popper">
+                  {cancerTypes.map((type) => (
+                    <SelectItem key={type} value={type}>
+                      {type}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
               <div>
-                <Label htmlFor="password"><b>Password</b></Label>
-                <MaskedText
-                  value={selectedPatient.password}
-                  onChange={(value) =>
-                    setSelectedPatient({ ...selectedPatient, password: value })
+                <Label htmlFor="notes"><b>Notes</b></Label>
+                <Textarea
+                  id="notes"
+                  value={selectedPatient.notes}
+                  onChange={(e) =>
+                    setSelectedPatient({ ...selectedPatient, notes: e.target.value })
                   }
+                  placeholder="Enter patient notes here..."
                 />
               </div>
               <div>

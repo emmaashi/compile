@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image"; // Import Image component
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -85,3 +85,5 @@ export default function Home() {
     </div>
   );
 }
+
+
