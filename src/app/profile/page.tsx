@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import MaskedText from "./components/masked-text"
+import MaskedText from "./components/masked-text";
+import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card"; // ShadCN UI Card components
+import Image from "next/image";
 
-// Define the patient type
 interface Patient {
   id: number;
   firstName: string;
@@ -18,7 +19,7 @@ interface Patient {
   photo: string;
 }
 
-// Sample patient data
+// Temp sample patients
 const patients: Patient[] = [
   {
     id: 1,
@@ -36,22 +37,41 @@ const patients: Patient[] = [
     email: "jane.smith@example.com",
     password: "securePass456",
     age: 28,
-    photo: "/images/jane.jpg",
+    photo: "/emma.png",
   },
 ];
 
 function ProfilePage() {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+  const [newPhoto, setNewPhoto] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
   const handlePatientClick = (patient: Patient) => {
     setSelectedPatient(patient);
     setDialogOpen(true);
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null;
+    setNewPhoto(file);
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhotoPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSaveChanges = () => {
     if (selectedPatient) {
-      console.log("Updated patient details:", selectedPatient);
+      const updatedPatient = {
+        ...selectedPatient,
+        photo: photoPreview || selectedPatient.photo,
+      };
+      console.log("Updated patient details:", updatedPatient);
     }
     setDialogOpen(false);
   };
@@ -61,19 +81,26 @@ function ProfilePage() {
       <h1 className="text-2xl font-bold">Patients</h1>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {patients.map((patient) => (
-          <Button
+          <Card
             key={patient.id}
-            className="flex flex-col items-center rounded-lg p-4 shadow hover:shadow-md"
+            className="flex flex-col items-center p-4 shadow hover:shadow-md cursor-pointer"
             onClick={() => handlePatientClick(patient)}
           >
-            <img
-              src={patient.photo}
-              alt={`${patient.firstName} ${patient.lastName}`}
-              className="w-16 h-16 rounded-full mb-2"
-            />
-            <span className="font-medium">{`${patient.firstName} ${patient.lastName}`}</span>
-            <span className="text-sm text-gray-500">{`Age: ${patient.age}`}</span>
-          </Button>
+            <CardHeader className="flex justify-center items-center">
+              <Image
+                src={patient.photo}
+                alt={`${patient.firstName} ${patient.lastName}`}
+                className="w-24 h-24 rounded-full"
+                width={96}
+                height={96}
+              />
+            </CardHeader>
+            <CardContent className="text-center">
+              <span className="font-medium">{`${patient.firstName} ${patient.lastName}`}</span>
+              <br></br>
+              <span className="text-sm text-gray-500">{`Age: ${patient.age}`}</span>
+            </CardContent>
+          </Card>
         ))}
       </div>
 
@@ -85,7 +112,7 @@ function ProfilePage() {
             </DialogHeader>
             <div className="space-y-4">
               <div>
-                <Label htmlFor="firstName">First Name</Label>
+                <Label htmlFor="firstName"><b>First Name</b></Label>
                 <Input
                   id="firstName"
                   value={selectedPatient.firstName}
@@ -95,7 +122,7 @@ function ProfilePage() {
                 />
               </div>
               <div>
-                <Label htmlFor="lastName">Last Name</Label>
+                <Label htmlFor="lastName"><b>Last Name</b></Label>
                 <Input
                   id="lastName"
                   value={selectedPatient.lastName}
@@ -105,7 +132,7 @@ function ProfilePage() {
                 />
               </div>
               <div>
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email"><b>Email</b></Label>
                 <Input
                   id="email"
                   type="email"
@@ -116,12 +143,22 @@ function ProfilePage() {
                 />
               </div>
               <div>
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password"><b>Password</b></Label>
                 <MaskedText
                   value={selectedPatient.password}
                   onChange={(value) =>
                     setSelectedPatient({ ...selectedPatient, password: value })
                   }
+                />
+              </div>
+              <div>
+                <Label htmlFor="photo"><b>Patient Photo</b></Label>
+                <Input
+                  id="photo"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="mt-2"
                 />
               </div>
             </div>
