@@ -51,7 +51,7 @@ def sign_up():
             return jsonify({"message": "User already exists."}), 409
         elif len(email) < 4:
             return jsonify({"message": "Email must be greater than 4 characters."}), 400
-        elif len(first_name) < 2:
+        elif len(first_name) < 2 or len(last_name) < 2:
             return jsonify({"message": "First name must be longer than 1 character."}), 400
         elif password1 != password2:
             return jsonify({"message": "Passwords do not match."}), 400
