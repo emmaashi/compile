@@ -2,8 +2,34 @@ import Link from "next/link";
 import Image from "next/image"; // Import Image component
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
 
 export default function Home() {
+  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  // const [error, setError] = useState(""); // For error handling
+  // const [successMessage, setSuccessMessage] = useState(""); // For success message
+
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault(); // Prevent the default form submission
+
+    // // Clear previous error and success messages
+    // setError("");
+    // setSuccessMessage("");
+
+    // Prepare data for the POST request
+    const formData = {
+      email,
+      firstName,
+      lastName,
+      password1: password,
+      password2: confirmPassword,
+    };
+  };
+  
   return (
     <div className="flex items-center justify-center min-h-screen bg-white p-6">
       <main className="flex flex-col gap-8 w-full max-w-3xl items-center">
