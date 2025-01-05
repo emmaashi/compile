@@ -1,4 +1,10 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
+import {
+  FileBarChart2 as VisualizationsIcon,
+  LogIn as PredictionsIcon,
+  User as ProfileIcon,
+  Settings as SettingsIcon,
+  Home as HomeIcon,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -9,48 +15,56 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 const items = [
   {
     title: "Home",
-    url: "#",
-    icon: Home,
+    url: "/home",
+    icon: HomeIcon,
   },
   {
     title: "Profile",
-    url: "#",
-    icon: Inbox,
+    url: "/profile",
+    icon: ProfileIcon,
   },
   {
     title: "Visualizations",
-    url: "#",
-    icon: Calendar,
+    url: "/visualizations",
+    icon: VisualizationsIcon,
   },
   {
     title: "Predictions",
-    url: "#",
-    icon: Search,
+    url: "/predictions",
+    icon: PredictionsIcon,
   },
   {
     title: "Settings",
-    url: "#",
-    icon: Settings,
+    url: "/settings",
+    icon: SettingsIcon,
   },
-]
+];
 
 export function AppSidebar() {
   return (
     <Sidebar collapsible="offcanvas">
       <SidebarContent>
+        <div className="p-4 flex justify-start items-center">
+          <img
+            src="/compile.png"
+            alt="Compile Logo"
+            className="w-50"
+          />
+        </div>
+
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
+                    <a href={item.url} className="flex items-center gap-3">
+                      <item.icon className="w-10 h-10" />
                       <span>{item.title}</span>
                     </a>
                   </SidebarMenuButton>
@@ -61,5 +75,5 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  )
+  );
 }
