@@ -1,7 +1,6 @@
 "use client"
 
 import { useRouter } from 'next/navigation'
-import { toast, ToastContainer } from 'react-toastify';
 import {
   FileBarChart2 as VisualizationsIcon,
   LogIn as PredictionsIcon,
@@ -25,21 +24,7 @@ export function AppSidebar() {
   const router = useRouter();
 
   const handleLogout = () => {
-    // Show the logout notification
-    toast.success('Logout successful!', {
-      position: "top-right",
-      autoClose: 3000, // Auto close after 3 seconds
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-
-    setTimeout(() => {
-      router.push('/');
-    }, 3000);
+    router.push('/');
   };
 
   const items = [
