@@ -30,12 +30,12 @@ interface Patient {
 const patients: Patient[] = [
   {
     id: 1,
-    firstName: "John",
-    lastName: "Doe",
-    cancerType: "Lung Cancer",
-    birthday: "1987-05-15",
-    notes: "Undergoing treatment with chemotherapy.",
-    photo: "/images/john.jpg",
+    firstName: "An Min",
+    lastName: "Zhai",
+    cancerType: "Stomach Cancer",
+    birthday: "1938-01-02",
+    notes: "In-home hospice care. Nurse visits every other day.",
+    photo: "/anmin.png",
   },
   {
     id: 2,
