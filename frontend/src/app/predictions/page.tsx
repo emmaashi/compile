@@ -1,87 +1,76 @@
-import Link from "next/link";
-import Image from "next/image"; // Import Image component
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+"use client";
+
+import { useState } from "react";
+import { Search, Calendar, Smile, HeartPulse, Brain, BookOpen } from "lucide-react";
+
+interface Command {
+  name: string;
+  icon: JSX.Element;
+  disabled?: boolean;
+}
 
 export default function Home() {
+  const [query, setQuery] = useState<string>("");
+  const [selectedCommand, setSelectedCommand] = useState<string>("");
+
+  const handleCommandClick = (command: string): void => {
+    alert(`You selected: ${command}`);
+    setQuery(""); // Clear search input after selection
+  };
+
+  const filteredCommands: Command[] = [
+    { name: "Optimizing Current Care", icon: <Calendar className="mr-2 h-4 w-4" /> },
+    { name: "What to Expect Next?", icon: <Smile className="mr-2 h-4 w-4" /> },
+    { name: "Overcoming Physical Challenges", icon: <HeartPulse className="mr-2 h-4 w-4" /> },
+    { name: "Navigating Mental Challenges", icon: <Brain className="mr-2 h-4 w-4" />, disabled: true },
+    { name: "Educational Resources", icon: <BookOpen className="mr-2 h-4 w-4" /> },
+  ];
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setQuery(e.target.value);
+  };
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-white p-6">
-      <main className="flex flex-col gap-8 w-full max-w-3xl items-center">
-        <div className="w-128 h-128">
-          <Image 
-            src="/compile.png"
-            alt="Compile Logo"
-            width={480}
-            height={480}
-            priority
+    <div className="flex justify-center items-center h-screen">
+      <div className="rounded-lg border shadow-md md:min-w-[450px]">
+        <div className="flex items-center p-2 border-b">
+          <Search className="mr-2 h-5 w-5 text-gray-500" />
+          <input
+            type="text"
+            placeholder="Type a command or search..."
+            value={query}
+            onChange={handleSearchChange}
+            className="w-full outline-none"
           />
         </div>
-        <form className="flex flex-col gap-6 w-full">
-          <div>
-            <label htmlFor="email" className="block text-lg font-medium mb-2 text-black">
-              Email
-            </label>
-            <Input
-              type="email"
-              id="email"
-              placeholder="Enter your email"
-              className="w-full border-b-2 border-gray-300 focus:border-black focus:outline-none py-3"
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="email" className="block text-lg font-medium mb-2 text-black">
-              First Name
-            </label>
-            <Input
-              type="name"
-              id="firstName"
-              placeholder="Enter your first name"
-              className="w-full border-b-2 border-gray-300 focus:border-black focus:outline-none py-3"
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="email" className="block text-lg font-medium mb-2 text-black">
-              Last Name
-            </label>
-            <Input
-              type="name"
-              id="lastName"
-              placeholder="Enter your last name"
-              className="w-full border-b-2 border-gray-300 focus:border-black focus:outline-none py-3"
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="password" className="block text-lg font-medium mb-2 text-black">
-              Password
-            </label>
-            <Input
-              type="password"
-              id="password"
-              placeholder="Enter your password"
-              className="w-full border-b-2 border-gray-300 focus:border-black focus:outline-none py-3"
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="password" className="block text-lg font-medium mb-2 text-black">
-              Confirm Password
-            </label>
-            <Input
-              type="password"
-              id="password"
-              placeholder="Enter your password"
-              className="w-full border-b-2 border-gray-300 focus:border-black focus:outline-none py-3"
-              required
-            />
-          </div>
-          <Button type="submit" className="w-full bg-black text-white py-3">
-            Sign-Up
-          </Button>
-        </form>
-      </main>
+
+        <div className="p-2 max-h-96 overflow-y-auto">
+          {filteredCommands.filter((command) => command.name.toLowerCase().includes(query.toLowerCase()))
+            .length === 0 ? (
+            <div>No results found.</div>
+          ) : (
+            <div>
+              <div className="font-bold">Suggestions</div>
+              <div>
+                {filteredCommands
+                  .filter((command) => command.name.toLowerCase().includes(query.toLowerCase()))
+                  .map((command, index) => (
+                    <div
+                      key={index}
+                      onClick={() => handleCommandClick(command.name)}
+                      className={`flex items-center p-2 cursor-pointer hover:bg-gray-200 ${
+                        command.disabled ? "text-gray-400 cursor-not-allowed" : ""
+                      }`}
+                    >
+                      {command.icon}
+                      <span>{command.name}</span>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
