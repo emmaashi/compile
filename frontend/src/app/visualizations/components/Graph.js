@@ -14,7 +14,6 @@ import {
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const Graph = () => {
-  // Data for the first chart (5-Year Survival Rates by Age Group)
   const ageGroupData = {
     labels: ["15-39", "40-49", "50-59", "60-69", "70-79", "80-99"],
     datasets: [
@@ -33,6 +32,7 @@ const Graph = () => {
 
   const ageGroupOptions = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       title: {
         display: true,
@@ -73,6 +73,7 @@ const Graph = () => {
 
   const cancerStageOptions = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       title: {
         display: true,
@@ -100,14 +101,14 @@ const Graph = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-6">
+    <div className="flex flex-row gap-6">
       {/* First Chart */}
-      <div className="w-full md:w-1/2">
+      <div className="w-1/2 h-[400px]">
         <Bar data={ageGroupData} options={ageGroupOptions} />
       </div>
 
       {/* Second Chart */}
-      <div className="w-full md:w-1/2">
+      <div className="w-1/2 h-[400px]">
         <Bar data={cancerStageData} options={cancerStageOptions} />
       </div>
     </div>
