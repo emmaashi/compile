@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import {
     Select,
@@ -15,13 +16,15 @@ import {
     SelectValue,
   } from "@/components/ui/select"
 import Image from "next/image";
+import { Separator } from "@/components/ui/separator"
 
 interface Patient {
   id: number;
   firstName: string;
   lastName: string;
+  diagnosisDate: string;
   cancerType: string;
-  birthday: string; // Use a date string format (YYYY-MM-DD)
+  birthday: string;
   notes: string;
   photo: string;
 }
@@ -33,6 +36,7 @@ const patients: Patient[] = [
     firstName: "An Min",
     lastName: "Zhai",
     cancerType: "Stomach Cancer",
+    diagnosisDate: "2020-03-27",
     birthday: "1938-01-02",
     notes: "In-home hospice care. Nurse visits every other day.",
     photo: "/anmin.png",
@@ -42,9 +46,20 @@ const patients: Patient[] = [
     firstName: "Emma",
     lastName: "Shi",
     cancerType: "Breast Cancer",
+    diagnosisDate: "2023-09-05",
     birthday: "2006-04-04",
     notes: "Scheduled for surgery next week.",
     photo: "/emma.png",
+  },
+  {
+    id: 3,
+    firstName: "Gao Ping",
+    lastName: "Xian",
+    cancerType: "Lung Cancer",
+    diagnosisDate: "2020-03-27",
+    birthday: "1938-01-02",
+    notes: "In-home hospice care. Nurse visits every other day.",
+    photo: "/gao-ping.png",
   },
 ];
 
@@ -87,7 +102,11 @@ function ProfilePage() {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold">Patients</h1>
+      <h1 className="text-4xl font-extrabold text-gray-800">
+          Profile
+        </h1>
+      <h2>This section allows you to manage detailed profiles for family members affected by cancer. Each profile contains essential information to track their cancer journey and ensure coordinated care.</h2>
+      <Separator />
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {patients.map((patient) => (
           <Card
@@ -99,9 +118,9 @@ function ProfilePage() {
               <Image
                 src={patient.photo}
                 alt={`${patient.firstName} ${patient.lastName}`}
-                className="w-24 h-24 rounded-full"
-                width={96}
-                height={96}
+                className="w-36 h-36 rounded-full"
+                width={100}
+                height={100}
               />
             </CardHeader>
             <CardContent className="text-center">
@@ -110,6 +129,8 @@ function ProfilePage() {
               <span className="text-sm text-gray-500">
                 {`${patient.birthday}`}
               </span>
+              <br />
+              <Badge variant="outline">{`${patient.cancerType}`}</Badge>
             </CardContent>
           </Card>
         ))}
@@ -117,13 +138,13 @@ function ProfilePage() {
 
       {selectedPatient && (
         <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
-          <DialogContent className="max-w-md space-y-6">
+          <DialogContent className="max-w-lg overflow-auto">
             <DialogHeader>
-              <DialogTitle>Edit patient details</DialogTitle>
+              <DialogTitle>Edit Patient Details</DialogTitle>
             </DialogHeader>
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="firstName"><b>First Name</b></Label>
+                <Label htmlFor="firstName">First Name</Label>
                 <Input
                   id="firstName"
                   value={selectedPatient.firstName}
@@ -133,7 +154,7 @@ function ProfilePage() {
                 />
               </div>
               <div>
-                <Label htmlFor="lastName"><b>Last Name</b></Label>
+                <Label htmlFor="lastName">Last Name</Label>
                 <Input
                   id="lastName"
                   value={selectedPatient.lastName}
@@ -143,38 +164,49 @@ function ProfilePage() {
                 />
               </div>
               <div>
-                <Label htmlFor="birthday"><b>Birthday</b></Label>
+                <Label htmlFor="cancerType">Cancer Type</Label>
+                <Select
+                  value={selectedPatient.cancerType}
+                  onValueChange={(value) =>
+                    setSelectedPatient({ ...selectedPatient, cancerType: value })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select cancer type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {cancerTypes.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {type}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="diagnosisDate">Diagnosis Date</Label>
                 <Input
-                id="birthday"
-                type="date"
-                value={selectedPatient.birthday}
-                onChange={(e) =>
-                setSelectedPatient({ ...selectedPatient, birthday: e.target.value })
-                }
+                  id="diagnosisDate"
+                  type="date"
+                  value={selectedPatient.diagnosisDate}
+                  onChange={(e) =>
+                    setSelectedPatient({ ...selectedPatient, diagnosisDate: e.target.value })
+                  }
                 />
-                </div>
+              </div>
               <div>
-              <Label htmlFor="cancerType"><b>Cancer Type</b></Label>
-              <Select
-                value={selectedPatient.cancerType}
-                onValueChange={(value) =>
-                  setSelectedPatient({ ...selectedPatient, cancerType: value })
-                }
-              >
-                <SelectTrigger id="cancerType">
-                  <SelectValue placeholder="Select cancer type" />
-                </SelectTrigger>
-                <SelectContent position="popper">
-                  {cancerTypes.map((type) => (
-                    <SelectItem key={type} value={type}>
-                      {type}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-              <div>
-                <Label htmlFor="notes"><b>Notes</b></Label>
+                <Label htmlFor="birthday">Birthday</Label>
+                <Input
+                  id="birthday"
+                  type="date"
+                  value={selectedPatient.birthday}
+                  onChange={(e) =>
+                    setSelectedPatient({ ...selectedPatient, birthday: e.target.value })
+                  }
+                />
+              </div>
+              <div className="col-span-2">
+                <Label htmlFor="notes">Notes</Label>
                 <Textarea
                   id="notes"
                   value={selectedPatient.notes}
@@ -184,14 +216,13 @@ function ProfilePage() {
                   placeholder="Enter patient notes here..."
                 />
               </div>
-              <div>
-                <Label htmlFor="photo"><b>Patient Photo</b></Label>
+              <div className="col-span-2">
+                <Label htmlFor="photo">Patient Photo</Label>
                 <Input
                   id="photo"
                   type="file"
                   accept="image/*"
                   onChange={handleFileChange}
-                  className="mt-2"
                 />
               </div>
             </div>
