@@ -9,14 +9,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select"
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import Image from "next/image";
-import { Separator } from "@/components/ui/separator"
+import { Separator } from "@/components/ui/separator";
 
 interface Patient {
   id: number;
@@ -29,8 +29,10 @@ interface Patient {
   photo: string;
 }
 
+const cancerTypes = ["Lung Cancer", "Breast Cancer", "Colon Cancer", "Stomach Cancer", "Prostate Cancer"];
+
 // Temp sample patients
-const patients: Patient[] = [
+const initialPatients: Patient[] = [
   {
     id: 1,
     firstName: "An Min",
@@ -63,50 +65,60 @@ const patients: Patient[] = [
   },
 ];
 
-const cancerTypes = ["Lung Cancer", "Breast Cancer", "Colon Cancer", "Stomach Cancer", "Prostate Cancer"];
-
 function ProfilePage() {
+  const [patients, setPatients] = useState<Patient[]>(initialPatients);
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
-  const [newPhoto, setNewPhoto] = useState<File | null>(null);
-  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [isNewMember, setIsNewMember] = useState(false);
 
   const handlePatientClick = (patient: Patient) => {
     setSelectedPatient(patient);
+    setIsNewMember(false);
     setDialogOpen(true);
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files ? e.target.files[0] : null;
-    setNewPhoto(file);
-
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPhotoPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
+  const handleAddNewMember = () => {
+    setSelectedPatient({
+      id: patients.length + 1,
+      firstName: "",
+      lastName: "",
+      diagnosisDate: "",
+      cancerType: "",
+      birthday: "",
+      notes: "",
+      photo: "",
+    });
+    setIsNewMember(true);
+    setDialogOpen(true);
   };
 
   const handleSaveChanges = () => {
     if (selectedPatient) {
-      const updatedPatient = {
-        ...selectedPatient,
-        photo: photoPreview || selectedPatient.photo,
-      };
-      console.log("Updated patient details:", updatedPatient);
+      if (isNewMember) {
+        setPatients([...patients, selectedPatient]);
+      } else {
+        setPatients(
+          patients.map((patient) =>
+            patient.id === selectedPatient.id ? selectedPatient : patient
+          )
+        );
+      }
     }
     setDialogOpen(false);
   };
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-4xl font-extrabold text-gray-800">
-          Profile
-        </h1>
-      <h2>This section allows you to manage detailed profiles for family members affected by cancer. Each profile contains essential information to track their cancer journey and ensure coordinated care.</h2>
+      <h1 className="text-4xl font-extrabold text-gray-800">Profile</h1>
+      <h2>
+        This section allows you to manage detailed profiles for family members
+        affected by cancer. Each profile contains essential information to track
+        their cancer journey and ensure coordinated care.
+      </h2>
       <Separator />
+      <Button className="mb-4" onClick={handleAddNewMember}>
+        + New Member
+      </Button>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {patients.map((patient) => (
           <Card
@@ -116,7 +128,7 @@ function ProfilePage() {
           >
             <CardHeader className="flex justify-center items-center">
               <Image
-                src={patient.photo}
+                src={patient.photo || "/placeholder.png"}
                 alt={`${patient.firstName} ${patient.lastName}`}
                 className="w-36 h-36 rounded-full"
                 width={100}
@@ -126,9 +138,7 @@ function ProfilePage() {
             <CardContent className="text-center">
               <span className="font-medium">{`${patient.firstName} ${patient.lastName}`}</span>
               <br />
-              <span className="text-sm text-gray-500">
-                {`${patient.birthday}`}
-              </span>
+              <span className="text-sm text-gray-500">{`${patient.birthday}`}</span>
               <br />
               <Badge variant="outline">{`${patient.cancerType}`}</Badge>
             </CardContent>
@@ -140,7 +150,9 @@ function ProfilePage() {
         <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
           <DialogContent className="max-w-lg overflow-auto">
             <DialogHeader>
-              <DialogTitle>Edit Patient Details</DialogTitle>
+              <DialogTitle>
+                {isNewMember ? "Add New Member" : "Edit Patient Details"}
+              </DialogTitle>
             </DialogHeader>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -216,21 +228,14 @@ function ProfilePage() {
                   placeholder="Enter patient notes here..."
                 />
               </div>
-              <div className="col-span-2">
-                <Label htmlFor="photo">Patient Photo</Label>
-                <Input
-                  id="photo"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                />
-              </div>
             </div>
             <div className="mt-4 flex justify-end space-x-2">
               <Button variant="ghost" onClick={() => setDialogOpen(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleSaveChanges}>Save Changes</Button>
+              <Button onClick={handleSaveChanges}>
+                {isNewMember ? "Add Member" : "Save Changes"}
+              </Button>
             </div>
           </DialogContent>
         </Dialog>
