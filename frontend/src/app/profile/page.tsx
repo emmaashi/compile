@@ -26,12 +26,11 @@ interface Patient {
   cancerType: string;
   birthday: string;
   notes: string;
-  photo: string;
+  photo: string; // Can store a URL or base64 data URI
 }
 
 const cancerTypes = ["Lung Cancer", "Breast Cancer", "Colon Cancer", "Stomach Cancer", "Prostate Cancer"];
 
-// Temp sample patients
 const initialPatients: Patient[] = [
   {
     id: 1,
@@ -105,6 +104,19 @@ function ProfilePage() {
       }
     }
     setDialogOpen(false);
+  };
+
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (selectedPatient) {
+          setSelectedPatient({ ...selectedPatient, photo: reader.result as string });
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -226,6 +238,15 @@ function ProfilePage() {
                     setSelectedPatient({ ...selectedPatient, notes: e.target.value })
                   }
                   placeholder="Enter patient notes here..."
+                />
+              </div>
+              <div className="col-span-2">
+                <Label htmlFor="photo"><b>Upload Photo</b></Label>
+                <Input
+                  id="photo"
+                  type="file"
+                  accept="image/*"
+                  onChange={handlePhotoUpload}
                 />
               </div>
             </div>
