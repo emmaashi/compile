@@ -6,7 +6,7 @@ Compile is a web application designed to support families managing the challenge
 
 Compile was inspired by my personal experiences witnessing a loved one undergo cancer treatment at home during in-home hospice care. Seeing the grueling physical and emotional toll this process takes on both patients and their families motivated me to create a tool that could help alleviate some of the shock and pain it brings. This project aims to empower families to proactively manage symptoms, gain predictive insights into cancer progression, and navigate the complexities of in-home care with greater confidence and support.
 
-# Technical Skills
+## Technical Skills
 - **Frontend:** TypeScript, React.js, Next.js, React-Chartjs, shacn/ui libary
 - **Backend:** Flask, Supabase (PostgreSQL), SQLAlchemy
 - **Machine Learning:** Python, Scikit-learn, Pandas, NumPy
