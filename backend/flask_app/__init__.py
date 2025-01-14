@@ -1,10 +1,12 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from os import getenv
 from flask_cors import CORS  # <-- Import CORS
 from dotenv import load_dotenv
 from sqlalchemy import create_engine  # Import create_engine for direct DB connection
+import joblib
+import numpy as np
 import os
 
 db = SQLAlchemy()
@@ -57,7 +59,25 @@ def create_app():
     
     # Test the connection directly using SQLAlchemy engine
     test_db_connection(DATABASE_URL)
+
+    # Load models
+    # model_severity = joblib.load('model_severity.pkl')
+    # model_symptoms = joblib.load('model_symptoms.pkl')
     
+    @app.route('/predict_severity', methods=['POST'])
+    def predict_severity():
+        data = request.json
+        features = [data['symptom_score'], data['age'], data['stage']]
+        prediction = model_severity.predict([features])
+        return jsonify({'severity': int(prediction[0])})
+
+    @app.route('/predict_symptoms', methods=['POST'])
+    def predict_symptoms():
+        data = request.json
+        features = [data['stage'], data['days_elapsed']]
+        prediction = model_symptoms.predict([features])
+        return jsonify({'predicted_symptom_score': float(prediction[0])})
+        
     return app
 
 def create_database(app):

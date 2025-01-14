@@ -1,0 +1,18 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LinearRegression
+import joblib
+
+# Symptom Prediction Model
+data_symptoms = pd.DataFrame({
+    'stage': [1, 2, 3, 4],
+    'days_elapsed': [10, 20, 30, 40],
+    'symptom_score': [2, 5, 7, 10]
+})
+X_symptoms = data_symptoms[['stage', 'days_elapsed']]
+y_symptoms = data_symptoms['symptom_score']
+
+model_symptoms = LinearRegression()
+model_symptoms.fit(X_symptoms, y_symptoms)
+joblib.dump(model_symptoms, 'model_symptoms.pkl')

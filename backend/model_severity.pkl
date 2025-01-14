@@ -1,0 +1,33 @@
+import pandas as pd
+import numpy as np
+from sklearn.linear_model import LinearRegression
+import joblib
+
+# Symptom Severity Prediction Model
+data_severity = pd.DataFrame({
+    'symptom_score': [2, 5, 3, 7, 4],
+    'age': [25, 40, 35, 60, 30],
+    'stage': [1, 2, 1, 3, 2],
+    'severity': [0, 1, 0, 1, 0]
+})
+X_severity = data_severity[['symptom_score', 'age', 'stage']]
+y_severity = data_severity['severity']
+
+X_train, X_test, y_train, y_test = train_test_split(X_severity, y_severity, test_size=0.2, random_state=42)
+
+model_severity = RandomForestClassifier()
+model_severity.fit(X_train, y_train)
+joblib.dump(model_severity, 'model_severity.pkl')
+
+# Symptom Prediction Model
+data_symptoms = pd.DataFrame({
+    'stage': [1, 2, 3, 4],
+    'days_elapsed': [10, 20, 30, 40],
+    'symptom_score': [2, 5, 7, 10]
+})
+X_symptoms = data_symptoms[['stage', 'days_elapsed']]
+y_symptoms = data_symptoms['symptom_score']
+
+model_symptoms = LinearRegression()
+model_symptoms.fit(X_symptoms, y_symptoms)
+joblib.dump(model_symptoms, 'model_symptoms.pkl')
