@@ -55,7 +55,7 @@ interface LineChartProps {
   yAxisLabel: string;
 }
 
-const CustomLineChart: React.FC<LineChartProps> = ({ labels, values, label, title, yAxisLabel }) => {
+const CustomLineChart = ({ labels, values, label, title, yAxisLabel }: LineChartProps) => {
   const data = {
     labels,
     datasets: [

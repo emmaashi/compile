@@ -11,6 +11,26 @@
       "static/chunks/main-app.js",
       "static/chunks/app/page.js"
     ],
+    "/home/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/home/layout.js"
+    ],
+    "/home/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/home/page.js"
+    ],
+    "/predictions/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/predictions/layout.js"
+    ],
+    "/predictions/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/predictions/page.js"
+    ],
     "/sign-up/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -21,15 +41,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/sign-up/page.js"
     ],
-    "/home/layout": [
+    "/visualizations/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/home/layout.js"
+      "static/chunks/app/visualizations/layout.js"
     ],
-    "/home/page": [
+    "/visualizations/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/home/page.js"
+      "static/chunks/app/visualizations/page.js"
     ]
   }
 }
