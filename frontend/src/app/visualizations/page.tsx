@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Card,
   CardContent,
@@ -35,6 +35,9 @@ import {
   Legend
 } from 'chart.js';
 import { Line, Bar } from 'react-chartjs-2';
+import { Button } from "@/components//ui/button"
+import { Input } from "@/components/ui/input";
+import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
 
 ChartJS.register(
   CategoryScale,
@@ -91,6 +94,7 @@ const CustomLineChart = ({ labels, values, label, title, yAxisLabel }: LineChart
     },
   };
 
+  
   return (
     <div className="h-[200px] w-full">
       <Line options={options} data={data} />
@@ -170,7 +174,25 @@ const chartOptions = {
   },
 };
 
+const medications = [
+  { name: "Omeprazole", dose: "20mg", time: "Morning" },
+  { name: "Metformin", dose: "500mg", time: "Morning & Evening" },
+  { name: "Insulin", dose: "10 units", time: "Before Meals" },
+  { name: "Morphine", dose: "15mg", time: "Every 4 Hours" },
+  { name: "Ondansetron", dose: "8mg", time: "As Needed" },
+  { name: "Pantoprazole", dose: "40mg", time: "Morning" },
+  { name: "Furosemide", dose: "20mg", time: "Morning" },
+  { name: "Aspirin", dose: "81mg", time: "Morning" },
+  { name: "Atorvastatin", dose: "10mg", time: "Night" },
+];
+
 export default function VisualizationsPage() {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredMedications = medications.filter((med) =>
+    med.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="space-y-6 ml-5 mt-5">
       <div className="space-y-4">
@@ -376,7 +398,48 @@ export default function VisualizationsPage() {
             </Card>
           </div>
         </TabsContent>
+        
+        <TabsContent value="medication" className="space-y-6">
+      {/* Search bar */}
+      <Input
+        type="text"
+        placeholder="Search for medication..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        className="mb-4"
+      />
 
+      {/* Medication Table */}
+      <Table className="mb-4">
+        <TableHeader>
+          <TableRow>
+            <TableCell>Medication Name</TableCell>
+            <TableCell>Dose</TableCell>
+            <TableCell>Time</TableCell>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {filteredMedications.length > 0 ? (
+            filteredMedications.map((med, index) => (
+              <TableRow key={index}>
+                <TableCell>{med.name}</TableCell>
+                <TableCell>{med.dose}</TableCell>
+                <TableCell>{med.time}</TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={3} className="text-center">
+                No medications found
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+
+      {/* Add Medication Button */}
+      <Button>Add Medication</Button>
+    </TabsContent>
       </Tabs>
     </div>
   );
